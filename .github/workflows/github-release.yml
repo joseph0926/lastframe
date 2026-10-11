@@ -2,12 +2,17 @@ name: GitHub Release
 
 # Run after approving a staged version on npmjs.com. The script waits until npm
 # shows the version, then creates the `lastframe@<version>` tag and release.
+#
+# Leave release_sha empty to tag the current main commit. GITHUB_TOKEN cannot
+# create a tag on an older commit whose workflow files differ from main (the API
+# answers 403), so only pass a SHA when no workflow changed since it.
 on:
   workflow_dispatch:
     inputs:
       release_sha:
-        description: Full SHA of the main commit that merged the Version Packages pull request
-        required: true
+        description: Commit to tag. Empty means the current main commit.
+        required: false
+        default: ''
         type: string
 
 permissions:
@@ -27,7 +32,7 @@ jobs:
       - name: Checkout release revision
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
         with:
-          ref: ${{ inputs.release_sha }}
+          ref: ${{ inputs.release_sha || github.sha }}
           persist-credentials: false
 
       - name: Setup Node.js
@@ -41,4 +46,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PACKAGE_MANIFESTS: '["package.json"]'
-          RELEASE_SHA: ${{ inputs.release_sha }}
+          RELEASE_SHA: ${{ inputs.release_sha || github.sha }}
