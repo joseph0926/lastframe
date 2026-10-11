@@ -1,0 +1,44 @@
+name: GitHub Release
+
+# Run after approving a staged version on npmjs.com. The script waits until npm
+# shows the version, then creates the `lastframe@<version>` tag and release.
+on:
+  workflow_dispatch:
+    inputs:
+      release_sha:
+        description: Full SHA of the main commit that merged the Version Packages pull request
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-release
+  cancel-in-progress: false
+
+jobs:
+  github-release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout release revision
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+        with:
+          ref: ${{ inputs.release_sha }}
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Create tag and release
+        run: node .github/scripts/create-github-releases.cjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE_MANIFESTS: '["package.json"]'
+          RELEASE_SHA: ${{ inputs.release_sha }}

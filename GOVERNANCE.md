@@ -88,7 +88,9 @@ The active `main protection` ruleset protects the default branch:
 1. Contributors add changesets via `pnpm changeset`
 2. The Changesets action creates a "Version Packages" PR
 3. Maintainer reviews and merges the version PR
-4. CI automatically publishes to npm
+4. CI stages the new version on npm with `npm stage publish` through trusted publishing
+5. Maintainer approves the staged version on npmjs.com with 2FA
+6. Maintainer runs the "GitHub Release" workflow with the merge commit SHA to create the tag and release
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed contribution guidelines.
 
