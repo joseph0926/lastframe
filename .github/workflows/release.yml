@@ -42,7 +42,7 @@ jobs:
             package_manifests="$(gh api --paginate --slurp \
               --header 'Accept: application/vnd.github+json' \
               "/repos/${GITHUB_REPOSITORY}/pulls/${pull_request_number}/files?per_page=100" \
-              | jq -c '[.[][] | select(.status != "removed") | .filename | select(test("^packages/[a-z0-9-]+/package\\.json$"))]')"
+              | jq -c '[.[][] | select(.status != "removed") | .filename | select(test("^package\\.json$"))]')"
 
             if ! jq -e 'length > 0' <<< "$package_manifests" > /dev/null; then
               echo 'No package manifests changed in the release pull request' >&2
@@ -84,7 +84,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish:
-    name: Publish packages
+    name: Publish package
     needs: route
     if: needs.route.outputs.publish == 'true'
     runs-on: ubuntu-latest
@@ -117,7 +117,7 @@ jobs:
       - name: Verify npm version
         run: npm --version
 
-      - name: Publish packages
+      - name: Publish package
         run: pnpm run release:publish
         env:
           NPM_CONFIG_PROVENANCE: 'true'
@@ -143,7 +143,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Create package tags and releases
-        run: node .github/scripts/create-github-releases.js
+        run: node .github/scripts/create-github-releases.cjs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PACKAGE_MANIFESTS: ${{ needs.route.outputs.package-manifests }}

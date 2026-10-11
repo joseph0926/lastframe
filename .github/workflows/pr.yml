@@ -30,5 +30,5 @@ jobs:
       - name: Run repository verification
         run: pnpm run verify
 
-      - name: Build
-        run: pnpm run build
+      - name: Build demo
+        run: pnpm --filter lastframe-demo build
