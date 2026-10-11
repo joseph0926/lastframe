@@ -1,58 +1,99 @@
 {
-  "name": "firsttx",
+  "name": "lastframe",
   "version": "0.0.0",
-  "private": true,
-  "description": "Replay the last visual state on CSR revisits before the app bundle starts. No SSR required.",
+  "description": "Paint the last frame your users saw before your JavaScript loads. Instant revisits for client-rendered apps, no SSR required.",
   "license": "MIT",
   "author": "joseph0926",
+  "type": "module",
   "packageManager": "pnpm@11.17.0",
   "engines": {
-    "node": "24.x"
+    "node": ">=20.19"
   },
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "default": "./dist/react.js"
+    },
+    "./vite": {
+      "types": "./dist/vite.d.ts",
+      "default": "./dist/vite.js"
+    },
+    "./build": {
+      "types": "./dist/build.d.ts",
+      "default": "./dist/build.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
   "keywords": [
-    "prepaint",
-    "react",
+    "lastframe",
     "csr",
+    "spa",
+    "perceived-performance",
+    "instant-loading",
+    "snapshot",
+    "skeleton",
     "indexeddb",
     "view-transitions",
-    "client-side-rendering"
+    "vite-plugin",
+    "react"
   ],
   "scripts": {
-    "dev": "turbo run dev --parallel",
-    "build": "turbo run build",
-    "clean": "turbo run clean && rimraf node_modules **/node_modules **/dist --glob",
-    "test": "turbo run test",
-    "test:run": "turbo run test:run",
-    "lint": "turbo run lint",
-    "lint:fix": "turbo run lint:fix",
-    "typecheck": "turbo run typecheck",
-    "verify": "pnpm run typecheck && pnpm run lint && pnpm run format:check && pnpm run test:run && pnpm run test:release",
-    "format": "prettier -w \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:release": "node --test .github/scripts/*.test.cjs",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p demo/tsconfig.json --noEmit",
+    "check:package": "publint --strict && attw --pack . --profile esm-only",
+    "format": "prettier -w \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml,css,html}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml,css,html}\"",
+    "verify": "pnpm run typecheck && pnpm run lint && pnpm run format:check && pnpm run test:run && pnpm run test:release && pnpm run build && pnpm run check:package",
+    "demo": "pnpm run build && pnpm --filter lastframe-demo dev",
+    "demo:build": "pnpm run build && pnpm --filter lastframe-demo build",
+    "demo:preview": "pnpm --filter lastframe-demo preview",
     "release:version": "changeset version && pnpm install --lockfile-only --ignore-scripts --no-frozen-lockfile",
-    "release:publish": "turbo run build --filter='./packages/*' && changeset publish",
-    "test:release": "node --test .github/scripts/*.test.js",
-    "prepare": "husky",
-    "tree": "tree -I 'node_modules|.git|.turbo|dist|build'"
+    "release:publish": "pnpm run build && changeset publish",
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{js,jsx,json,md}": [
+    "*.{js,jsx,json,md,css,html}": [
       "prettier --write"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/joseph0926/firsttx.git"
+  "peerDependencies": {
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0",
+    "vite": "^7.0.0 || ^8.0.0"
   },
-  "bugs": {
-    "url": "https://github.com/joseph0926/firsttx/issues"
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    }
   },
-  "homepage": "https://github.com/joseph0926/firsttx#readme",
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@changesets/cli": "^2.29.8",
     "@changesets/config": "^3.1.2",
     "@eslint/js": "^9.39.2",
@@ -67,16 +108,26 @@
     "jsdom": "^29.1.1",
     "lint-staged": "^16.2.3",
     "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.7.1",
-    "rimraf": "^6.0.1",
-    "turbo": "^2.10.5",
+    "publint": "^0.3.25",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tsdown": "~0.23.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.54.0",
-    "vite": "^7.3.1",
+    "vite": "^8.3.4",
     "vitest": "^4.1.11"
   },
-  "dependencies": {
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
-  }
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joseph0926/lastframe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/joseph0926/lastframe/issues"
+  },
+  "homepage": "https://joseph0926.github.io/lastframe/"
 }

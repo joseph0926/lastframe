@@ -7,9 +7,14 @@ body:
     id: area
     attributes:
       label: Area
-      description: Which package would this affect?
+      description: Which part would this affect?
       options:
-        - prepaint
+        - capture
+        - boot and restore
+        - react
+        - vite plugin
+        - build helper
+        - docs or demo
         - other
     validations:
       required: true

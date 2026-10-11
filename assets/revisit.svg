@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" role="img" aria-label="Timeline of a revisit. Without Lastframe the screen stays blank until the bundle has loaded. With Lastframe the last frame appears almost immediately and is replaced by the live app when it is ready.">
+  <defs>
+    <pattern id="blank" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+      <rect width="4" height="8" fill="#C8D0D9"/>
+    </pattern>
+    <linearGradient id="frame" x1="0" x2="1">
+      <stop offset="0" stop-color="#0098A8"/>
+      <stop offset="1" stop-color="#CF2E68"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="300" rx="20" fill="#EEF1F4"/>
+  <g font-family="Archivo, 'Helvetica Neue', Arial, sans-serif" fill="#18202B">
+    <text x="40" y="70" font-size="20" font-weight="700">Without Lastframe</text>
+    <rect x="40" y="88" width="640" height="40" rx="8" fill="url(#blank)"/>
+    <rect x="680" y="88" width="240" height="40" rx="8" fill="#18202B"/>
+    <text x="56" y="114" font-size="16" fill="#18202B">Blank or spinner while the bundle downloads</text>
+    <text x="696" y="114" font-size="16" fill="#EEF1F4">Live app</text>
+
+    <text x="40" y="180" font-size="20" font-weight="700">With Lastframe</text>
+    <rect x="40" y="198" width="10" height="40" rx="3" fill="url(#blank)"/>
+    <rect x="52" y="198" width="628" height="40" rx="8" fill="url(#frame)"/>
+    <rect x="680" y="198" width="240" height="40" rx="8" fill="#18202B"/>
+    <text x="68" y="224" font-size="16" fill="#FFFFFF">The last frame the user saw, painted in milliseconds</text>
+    <text x="696" y="224" font-size="16" fill="#EEF1F4">Live app</text>
+
+    <line x1="680" y1="78" x2="680" y2="256" stroke="#18202B" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <text x="40" y="276" font-size="14" fill="#566273">Navigation</text>
+    <text x="688" y="276" font-size="14" fill="#566273">Bundle loaded, app calls ready()</text>
+  </g>
+</svg>

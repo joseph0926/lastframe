@@ -1,25 +1,22 @@
 import eslint from '@eslint/js';
 import { defineConfig } from 'eslint/config';
+import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
   {
-    ignores: [
-      '**/node_modules/**',
-      '**/dist/**',
-      '.turbo/**',
-      '**/*.d.ts',
-      '**/*.config.ts',
-      'turbo.json',
-    ],
+    ignores: ['**/node_modules/**', '**/dist/**', '**/*.d.ts', '**/*.config.ts', '.claude/**'],
   },
 
   {
-    files: ['eslint.config.*', '**/*.config.{js,cjs,mjs,ts,cts,mts}', 'turbo.json'],
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-    },
+    files: ['eslint.config.js'],
+    languageOptions: { ecmaVersion: 'latest', sourceType: 'module', globals: globals.node },
+    ...eslint.configs.recommended,
+  },
+
+  {
+    files: ['.github/scripts/*.cjs'],
+    languageOptions: { ecmaVersion: 'latest', sourceType: 'commonjs', globals: globals.node },
     ...eslint.configs.recommended,
   },
 

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "types": ["node", "vite/client"],
+    // Type-check against the library source so CI does not need dist/ first.
+    // Vite still resolves the built package through its exports.
+    "paths": {
+      "lastframe": ["../src/index.ts"],
+      "lastframe/react": ["../src/react/index.tsx"],
+      "lastframe/vite": ["../src/vite/index.ts"]
+    }
+  },
+  "include": ["src", "vite.config.ts", "../src/globals.d.ts"]
+}

@@ -1,214 +1,92 @@
-# Contributing to FirstTx
+# Contributing to Lastframe
 
-Thank you for your interest in contributing to FirstTx. This document explains how to participate in the project.
-
-## Table of Contents
-
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-- [Development Workflow](#development-workflow)
-- [Pull Request Process](#pull-request-process)
-- [Coding Standards](#coding-standards)
-- [Commit Convention](#commit-convention)
-- [Issue Guidelines](#issue-guidelines)
+Thank you for your interest in contributing. This document explains how to work on the project.
 
 ## Code of Conduct
 
-This project adheres to the [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+This project follows the [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold it.
 
-## Getting Started
+## Getting started
 
 ### Prerequisites
 
-- Node.js 24+
-- pnpm 11.17.0+
-- Git
+- Node.js 24 (see `.nvmrc`)
+- pnpm 11.17.0 (the version in `package.json#packageManager`)
 
 ### Setup
 
-1. Fork the repository
-2. Clone your fork:
-   ```bash
-   git clone https://github.com/<your-username>/firsttx.git
-   cd firsttx
-   ```
-3. Install dependencies:
-   ```bash
-   pnpm install
-   ```
-4. Create a branch:
-   ```bash
-   git checkout -b feat/your-feature-name
-   ```
-
-## Development Workflow
-
-### Running Development Server
-
 ```bash
-# Run all packages in dev mode
-pnpm dev
-
-# Run specific package
-pnpm --filter @firsttx/prepaint dev
+git clone https://github.com/<your-username>/lastframe.git
+cd lastframe
+pnpm install
+git switch -c feat/your-change
 ```
 
-### Testing
+## Repository layout
+
+| Path      | What it is                                                                |
+| --------- | ------------------------------------------------------------------------- |
+| `src/`    | The `lastframe` package. Entries: core, `react/`, `vite/`, `build/`.      |
+| `tests/`  | Vitest tests in jsdom, with `fake-indexeddb`.                             |
+| `demo/`   | The live demo, a private Vite app that consumes the package from `dist/`. |
+| `docs/`   | The Korean README, the migration guide, and the FirstTx changelog.        |
+| `assets/` | Images used by the README.                                                |
+
+The boot script that runs before an app's bundle is `src/boot-script.ts`. It is prebuilt in four variants by `tsdown.config.ts`, and `src/build/boot-script.ts` picks one by file name. Keep both in sync.
+
+## Development
 
 ```bash
-# Run all tests
-pnpm test
-
-# Run tests once (CI mode)
-pnpm test:run
-
-# Run tests for specific package
-pnpm test:run --filter=@firsttx/prepaint
-```
-
-### Linting and Type Checking
-
-```bash
-# Lint
-pnpm lint
-
-# Type check
+pnpm test            # watch mode
+pnpm test:run        # once, as CI does
 pnpm typecheck
-
-# Format code
+pnpm lint
 pnpm format
+pnpm build           # library into dist/
+pnpm check:package   # publint and Are the Types Wrong, after build
+pnpm demo            # build, then start the demo at http://localhost:5173/lastframe/
 ```
 
-### Building
+To see a change end to end, run `pnpm demo:build && pnpm demo:preview`, open the demo, and reload it. Use the Application panel of your browser's devtools to inspect the `lastframe` IndexedDB database.
 
-```bash
-# Build all packages
-pnpm build
+## Pull requests
 
-# Build specific package
-pnpm --filter @firsttx/prepaint build
-```
+1. Run `pnpm verify`. It runs type checks, lint, format check, tests, the release script tests, the build, and the package checks, the same as CI.
+2. Update the README (and `docs/README.ko.md`) when you change behavior or options.
+3. Add a changeset when the change affects the published package: `pnpm changeset`.
 
-## Pull Request Process
+### Checklist
 
-### Before Submitting
+- [ ] Tests added or updated
+- [ ] Documentation updated, if behavior changed
+- [ ] Changeset added, if the package changed
+- [ ] Breaking changes documented with a migration note
 
-1. Run `pnpm verify`, which runs type checking, lint, format check, and tests the same way CI does
-2. Update documentation if needed
-3. Add changeset if your change affects published packages:
-   ```bash
-   pnpm changeset
-   ```
+## Coding standards
 
-### PR Checklist
+- Strict TypeScript; no `any` where a real type is possible.
+- Lastframe must never break the host app. Failures in boot or capture are caught and reported through the development logger, and the page loads as if Lastframe were not there.
+- The boot path is size-sensitive. Check `dist/boot/boot.prod.min.iife.js` after changes that touch `src/boot.ts` or its imports.
+- Comments explain why, not what.
 
-- [ ] Tests added/updated for the changes
-- [ ] Documentation updated (if applicable)
-- [ ] Changeset added (if affecting published packages)
-- [ ] No breaking changes OR breaking changes documented
-- [ ] Self-reviewed the code
+## Commit convention
 
-### Review Process
+This project uses [Conventional Commits](https://www.conventionalcommits.org/): `<type>(<scope>): <description>`.
 
-1. Pass all required CI checks
-2. Address maintainer feedback and resolve review conversations, if any
-3. The maintainer merges the PR
-
-## Coding Standards
-
-### TypeScript
-
-- Use strict TypeScript configuration
-- Prefer explicit types over `any`
-- Export types alongside implementations
-
-### React
-
-- Use functional components with hooks
-- Follow React 19 best practices
-- Avoid unnecessary re-renders
-
-### General
-
-- Keep functions small and focused
-- Write self-documenting code
-- Add comments only when the "why" is not obvious
-- Prefer composition over inheritance
-
-## Commit Convention
-
-This project uses [Conventional Commits](https://www.conventionalcommits.org/).
-
-### Format
+Types: `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `chore`, `ci`.
+Scopes: `core`, `react`, `vite`, `build`, `demo`, `docs`, `deps`.
 
 ```
-<type>(<scope>): <description>
-
-[optional body]
-
-[optional footer]
+feat(core): add pattern routes
+fix(vite): resolve the boot script path for a relative base
+docs: clarify the ready condition
 ```
 
-### Types
+## Issues
 
-| Type       | Description                                             |
-| ---------- | ------------------------------------------------------- |
-| `feat`     | New feature                                             |
-| `fix`      | Bug fix                                                 |
-| `docs`     | Documentation only                                      |
-| `style`    | Code style (formatting, semicolons, etc.)               |
-| `refactor` | Code change that neither fixes a bug nor adds a feature |
-| `perf`     | Performance improvement                                 |
-| `test`     | Adding or updating tests                                |
-| `chore`    | Maintenance tasks                                       |
-| `ci`       | CI/CD changes                                           |
+Use the issue templates. For bugs, include the browser, the framework and bundler versions, and a minimal reproduction. For questions, use [GitHub Discussions](https://github.com/joseph0926/lastframe/discussions).
 
-### Scopes
+## Need help?
 
-| Scope      | Description               |
-| ---------- | ------------------------- |
-| `prepaint` | @firsttx/prepaint package |
-| `docs`     | Documentation             |
-| `deps`     | Dependencies              |
-
-### Examples
-
-```
-feat(prepaint): add overlay option for duplicate prevention
-fix(prepaint): skip capture when the route is not allowed
-docs: update the prepaint API reference
-chore(deps): bump typescript to 5.9
-```
-
-## Issue Guidelines
-
-### Bug Reports
-
-Use the bug report template and include:
-
-- Which package is affected
-- Expected vs actual behavior
-- Steps to reproduce
-- Environment (browser, OS)
-
-### Feature Requests
-
-Use the feature request template and include:
-
-- Problem you're trying to solve
-- Proposed solution
-- Alternatives you've considered
-
-### Questions
-
-For questions, please use [GitHub Discussions](https://github.com/joseph0926/firsttx/discussions) instead of issues.
-
----
-
-## Need Help?
-
-- Check existing [issues](https://github.com/joseph0926/firsttx/issues)
-- Read the [README](./README.md)
+- [Issues](https://github.com/joseph0926/lastframe/issues)
 - Email: joseph0926.dev@gmail.com
-
-Thank you for contributing!

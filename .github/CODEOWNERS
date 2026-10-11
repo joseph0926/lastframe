@@ -4,9 +4,10 @@
 # Workflows require careful review
 /.github/workflows/ @joseph0926
 
-# Core packages
-/packages/prepaint/ @joseph0926
+# Library source
+/src/ @joseph0926
 
-# Documentation
+# Documentation and demo
 /docs/ @joseph0926
+/demo/ @joseph0926
 /*.md @joseph0926

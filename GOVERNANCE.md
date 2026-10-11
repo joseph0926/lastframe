@@ -1,6 +1,6 @@
 # Governance
 
-This document describes the governance model for FirstTx.
+This document describes the governance model for Lastframe.
 
 ## Roles
 
@@ -40,7 +40,7 @@ For most changes (bug fixes, minor features, documentation):
 
 ### Significant Changes
 
-For changes that affect public API, architecture, or add new packages:
+For changes that affect the public API, the storage format, or the architecture:
 
 1. Open a GitHub Discussion or Issue first
 2. Gather feedback from maintainers and community
@@ -63,13 +63,13 @@ Breaking changes require:
 - The repository is operated by one maintainer, so the ruleset requires zero approving reviews
 - CI must pass `Verify`
 - Review conversations must be resolved
-- Changes to published packages require a changeset
+- Changes to the published package require a changeset
 
 ### CODEOWNERS
 
 The [CODEOWNERS](.github/CODEOWNERS) file defines code ownership:
 
-- Package and workflow changes are routed to the maintainer
+- Source and workflow changes are routed to the maintainer
 - Code owner review is not a required ruleset condition while the repository has one maintainer
 
 ### Branch Protection
@@ -86,7 +86,7 @@ The active `main protection` ruleset protects the default branch:
 ## Release Process
 
 1. Contributors add changesets via `pnpm changeset`
-2. Changesets action creates a "Version Packages" PR
+2. The Changesets action creates a "Version Packages" PR
 3. Maintainer reviews and merges the version PR
 4. CI automatically publishes to npm
 

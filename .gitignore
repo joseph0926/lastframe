@@ -8,19 +8,14 @@ pnpm-debug.log*
 # Build & caches
 dist/
 out/
-build/
+/build/
 .cache/
 *.tsbuildinfo
-
-# Turborepo
-.turbo/
-.turborepo/
 
 # Frameworks
 .next/
 storybook-static/
 .vite/
-docs/temp.*
 
 # Env & secrets
 .env

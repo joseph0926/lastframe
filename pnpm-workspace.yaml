@@ -1,27 +1,21 @@
 packages:
-  - 'packages/*'
+  - 'demo'
 allowBuilds:
-  '@swc/core': true
   esbuild: true
-minimumReleaseAgeExclude:
-  - '@turbo/darwin-64@2.10.5'
-  - '@turbo/darwin-arm64@2.10.5'
-  - '@turbo/linux-64@2.10.5'
-  - '@turbo/linux-arm64@2.10.5'
-  - '@turbo/windows-64@2.10.5'
-  - '@turbo/windows-arm64@2.10.5'
-  - turbo@2.10.5
 auditConfig:
   ignoreGhsas:
     - GHSA-mh99-v99m-4gvg
+    # braces <=3.0.3 has no patched release yet. It is reached only through
+    # micromatch in dev tooling (changesets, lint-staged, vite), which matches
+    # glob patterns written in this repository, never untrusted input.
+    - GHSA-vfj7-8cjw-p6xm
 overrides:
-  'vite': '^7.3.1'
-  'rollup': '^4.54.0'
   'react': '^19.2.4'
   'react-dom': '^19.2.4'
   '@types/react': '^19.2.10'
   '@types/react-dom': '^19.2.3'
   'postcss': '^8.5.23'
   'nanoid@<3.3.18': '^3.3.18'
+  'source-map-js@<1.2.2': '^1.2.2'
   'brace-expansion@<1.1.21': '^1.1.21'
   'brace-expansion@>=4.0.0 <5.0.12': '^5.0.12'
