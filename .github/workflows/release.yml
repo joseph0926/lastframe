@@ -143,5 +143,5 @@ jobs:
             echo "### ${name}@${version} is staged"
             echo
             echo "1. Approve it in the Staged Packages tab on npmjs.com (2FA required)."
-            echo "2. Run the **GitHub Release** workflow with release_sha \`${{ github.event.workflow_run.head_sha }}\`."
+            echo "2. Run the **GitHub Release** workflow on main (leave release_sha empty)."
           } >> "$GITHUB_STEP_SUMMARY"
