@@ -7,6 +7,7 @@ import { defineConfig } from 'vite';
 const base = '/lastframe/';
 
 export default defineConfig({
+  root: import.meta.dirname,
   base,
   plugins: [
     react(),
