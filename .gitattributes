@@ -14,5 +14,5 @@
 *.woff binary
 *.woff2 binary
 
-packages/*/dist/** linguist-generated
-.turbo/** linguist-generated
+dist/** linguist-generated
+demo/dist/** linguist-generated

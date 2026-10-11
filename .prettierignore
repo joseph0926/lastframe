@@ -1,4 +1,7 @@
-**/.metrics/
-**/playwright-report/
-**/test-results/
 pnpm-lock.yaml
+dist/
+demo/dist/
+docs/legacy/
+CHANGELOG.md
+.docs/
+.claude/
