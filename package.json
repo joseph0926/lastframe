@@ -1,6 +1,6 @@
 {
   "name": "lastframe",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Paint the last frame your users saw before your JavaScript loads. Instant revisits for client-rendered apps, no SSR required.",
   "license": "MIT",
   "author": "joseph0926",
