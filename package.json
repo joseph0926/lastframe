@@ -64,7 +64,6 @@
     "demo:build": "pnpm run build && vite build --config demo/vite.config.ts",
     "demo:preview": "vite preview --config demo/vite.config.ts",
     "release:version": "changeset version && pnpm install --lockfile-only --ignore-scripts --no-frozen-lockfile",
-    "release:publish": "pnpm run build && changeset publish",
     "prepare": "husky"
   },
   "lint-staged": {

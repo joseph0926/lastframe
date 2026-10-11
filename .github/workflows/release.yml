@@ -23,7 +23,6 @@ jobs:
       pull-requests: read
     outputs:
       publish: ${{ steps.route.outputs.publish }}
-      package-manifests: ${{ steps.route.outputs.package-manifests }}
     steps:
       - name: Identify the merged pull request
         id: route
@@ -50,10 +49,8 @@ jobs:
             fi
 
             echo "publish=true" >> "$GITHUB_OUTPUT"
-            echo "package-manifests=$package_manifests" >> "$GITHUB_OUTPUT"
           else
             echo "publish=false" >> "$GITHUB_OUTPUT"
-            echo 'package-manifests=[]' >> "$GITHUB_OUTPUT"
           fi
 
   version-pr:
@@ -84,7 +81,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish:
-    name: Publish package
+    name: Stage package
     needs: route
     if: needs.route.outputs.publish == 'true'
     runs-on: ubuntu-latest
@@ -114,37 +111,37 @@ jobs:
       - name: Install dependencies without lifecycle scripts
         run: pnpm install --frozen-lockfile --ignore-scripts
 
+      # Staged publishing needs npm 11.15.0 or later; pin the CLI instead of
+      # relying on the version bundled with Node.
+      - name: Install npm with staged publishing
+        run: npm install --global npm@11.21.0
+
       - name: Verify npm version
         run: npm --version
 
-      - name: Publish package
-        run: pnpm run release:publish
+      - name: Build package
+        run: pnpm run build
+
+      # The trusted publisher only allows `npm stage publish`. The staged version
+      # goes live after a maintainer approves it on npmjs.com with 2FA; then run
+      # the "GitHub Release" workflow to tag it.
+      - name: Stage package for approval
         env:
           NPM_CONFIG_PROVENANCE: 'true'
+        run: |
+          name="$(node -p "require('./package.json').name")"
+          version="$(node -p "require('./package.json').version")"
 
-  github-release:
-    name: Create GitHub releases
-    needs: [route, publish]
-    if: needs.publish.result == 'success' && needs.route.outputs.publish == 'true'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout verified revision
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
-          persist-credentials: false
+          if npm view "${name}@${version}" version > /dev/null 2>&1; then
+            echo "${name}@${version} is already on npm; nothing to stage." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
 
-      - name: Setup Node.js
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
-        with:
-          node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
+          npm stage publish --access public --ignore-scripts
 
-      - name: Create package tags and releases
-        run: node .github/scripts/create-github-releases.cjs
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGE_MANIFESTS: ${{ needs.route.outputs.package-manifests }}
-          RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+          {
+            echo "### ${name}@${version} is staged"
+            echo
+            echo "1. Approve it in the Staged Packages tab on npmjs.com (2FA required)."
+            echo "2. Run the **GitHub Release** workflow with release_sha \`${{ github.event.workflow_run.head_sha }}\`."
+          } >> "$GITHUB_STEP_SUMMARY"
