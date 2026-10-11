@@ -24,13 +24,13 @@ git switch -c feat/your-change
 
 ## Repository layout
 
-| Path      | What it is                                                                |
-| --------- | ------------------------------------------------------------------------- |
-| `src/`    | The `lastframe` package. Entries: core, `react/`, `vite/`, `build/`.      |
-| `tests/`  | Vitest tests in jsdom, with `fake-indexeddb`.                             |
-| `demo/`   | The live demo, a private Vite app that consumes the package from `dist/`. |
-| `docs/`   | The Korean README, the migration guide, and the FirstTx changelog.        |
-| `assets/` | Images used by the README.                                                |
+| Path      | What it is                                                                                                       |
+| --------- | ---------------------------------------------------------------------------------------------------------------- |
+| `src/`    | The `lastframe` package. Entries: core, `react/`, `vite/`, `build/`.                                             |
+| `tests/`  | Vitest tests in jsdom, with `fake-indexeddb`.                                                                    |
+| `demo/`   | The live demo. Not a separate package: it runs on the root's dependencies and imports the built package by name. |
+| `docs/`   | The Korean README, the migration guide, and the FirstTx changelog.                                               |
+| `assets/` | Images used by the README.                                                                                       |
 
 The boot script that runs before an app's bundle is `src/boot-script.ts`. It is prebuilt in four variants by `tsdown.config.ts`, and `src/build/boot-script.ts` picks one by file name. Keep both in sync.
 

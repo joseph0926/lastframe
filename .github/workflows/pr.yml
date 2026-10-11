@@ -31,4 +31,4 @@ jobs:
         run: pnpm run verify
 
       - name: Build demo
-        run: pnpm --filter lastframe-demo build
+        run: pnpm exec vite build --config demo/vite.config.ts
