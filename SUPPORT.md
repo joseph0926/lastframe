@@ -2,25 +2,26 @@
 
 ## Documentation
 
-- Package docs: [Prepaint](./packages/prepaint/README.md)
 - README: [English](./README.md) | [Korean](./docs/README.ko.md)
+- [Migration from FirstTx Prepaint](./docs/migration.md)
+- [Live demo](https://joseph0926.github.io/lastframe/)
 
 ## Getting Help
 
 ### Before Asking
 
-1. Check the [package docs](./packages/prepaint/README.md)
-2. Search [existing issues](https://github.com/joseph0926/firsttx/issues)
-3. Review the [Troubleshooting section](./README.md#troubleshooting) in README
+1. Check the [README](./README.md)
+2. Search [existing issues](https://github.com/joseph0926/lastframe/issues)
+3. Run your app with the Vite dev server and read the `[lastframe]` console logs
 
 ### Where to Ask
 
-| Type             | Where                                                                                  |
-| ---------------- | -------------------------------------------------------------------------------------- |
-| Bug reports      | [GitHub Issues](https://github.com/joseph0926/firsttx/issues/new?template=bug.yml)     |
-| Feature requests | [GitHub Issues](https://github.com/joseph0926/firsttx/issues/new?template=feature.yml) |
-| Questions        | [GitHub Discussions](https://github.com/joseph0926/firsttx/discussions)                |
-| Security issues  | See [SECURITY.md](./SECURITY.md)                                                       |
+| Type             | Where                                                                                    |
+| ---------------- | ---------------------------------------------------------------------------------------- |
+| Bug reports      | [GitHub Issues](https://github.com/joseph0926/lastframe/issues/new?template=bug.yml)     |
+| Feature requests | [GitHub Issues](https://github.com/joseph0926/lastframe/issues/new?template=feature.yml) |
+| Questions        | [GitHub Discussions](https://github.com/joseph0926/lastframe/discussions)                |
+| Security issues  | See [SECURITY.md](./SECURITY.md)                                                         |
 
 ### Response Time
 

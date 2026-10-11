@@ -7,7 +7,7 @@
 | latest   | Yes       |
 | < latest | No        |
 
-We only provide security updates for the latest version of each package. Please ensure you are using the latest version before reporting a vulnerability.
+We only provide security updates for the latest version of `lastframe`. Please ensure you are using the latest version before reporting a vulnerability.
 
 ## Reporting a Vulnerability
 
@@ -16,13 +16,13 @@ We only provide security updates for the latest version of each package. Please 
 ### How to Report
 
 1. **Email**: Send a detailed report to [joseph0926.dev@gmail.com](mailto:joseph0926.dev@gmail.com)
-2. **GitHub Security Advisories**: Use [GitHub's private vulnerability reporting](https://github.com/joseph0926/firsttx/security/advisories/new)
+2. **GitHub Security Advisories**: Use [GitHub's private vulnerability reporting](https://github.com/joseph0926/lastframe/security/advisories/new)
 
 ### What to Include
 
 - Description of the vulnerability
 - Steps to reproduce
-- Affected package(s) and version(s)
+- Affected version(s)
 - Potential impact
 - Any suggested fixes (optional)
 
@@ -44,61 +44,20 @@ We only provide security updates for the latest version of each package. Please 
 
 ## Security Best Practices for Users
 
-### Dependencies
+### Data handling
 
-- Keep FirstTx packages updated to the latest version
-- Regularly run `pnpm audit` to check for known vulnerabilities
-- Review dependency updates before merging
+- Lastframe stores a copy of what was on screen in IndexedDB, which is not encrypted. Mask or exclude anything that should not be copied, with `data-lastframe-mask`, `data-lastframe-exclude`, or the `mask` and `exclude` options.
+- Call `setScope()` after sign-in and `setScope(null)` plus `clearFrames()` on sign-out, so a shared device never replays another user's screen.
+- Set `styles: false` if your stylesheets can contain user-controlled data.
 
-### Data Handling
+### Content security
 
-- FirstTx stores data in IndexedDB; ensure sensitive data is encrypted if needed
-- Be aware that Prepaint captures DOM snapshots; avoid storing sensitive data in the DOM
-- Use HTTPS for all server communications
-
-### Content Security
-
-- Prepaint sanitizes captured HTML with a built-in sanitizer before replaying it
-- Configure appropriate Content Security Policy (CSP) headers
-- Validate and sanitize all user inputs
+- The boot script is emitted as a hashed file by default. If you set `inline: true`, allow it with a CSP hash or the `nonce` option.
 
 ## Security Features
 
-### Built-in Protections
-
-- **Snapshot sanitization**: Prepaint removes dangerous elements, event handlers, executable URL schemes, and navigation or submit targets before restoring a snapshot
-- **No eval()**: No dynamic code execution
-
-### Recommendations
-
-```typescript
-// Example: Marking sensitive elements
-<div data-firsttx-volatile>
-  {/* This content will not be captured by Prepaint */}
-  <SensitiveData />
-</div>
-```
-
-## Known Limitations
-
-- IndexedDB data is not encrypted by default
-- Prepaint snapshots may contain visible DOM content
-
-## Disclosure Policy
-
-We follow coordinated disclosure:
-
-1. Reporter submits vulnerability privately
-2. We assess and develop a fix
-3. Fix is released with a security advisory
-4. Details are publicly disclosed after users have time to update
-
-We request that you:
-
-- Give us reasonable time to address the issue before public disclosure
-- Make a good faith effort to avoid privacy violations and data destruction
-- Do not exploit the vulnerability beyond what is necessary to demonstrate it
-
----
-
-Thank you for helping keep FirstTx secure.
+- **Masking before storage**: masked text and media are replaced before the frame is written, so the original content never reaches IndexedDB. Password field values are never stored.
+- **Sanitized restore**: scripts, frames, `meta`, `link`, `base`, event handlers, executable URL schemes, links, and form targets are removed before a frame is painted.
+- **Inert overlay**: the frame is painted in a shadow root outside the app container, marked `inert` and `aria-hidden`, and swallows pointer events.
+- **Scoped and versioned frames**: frames are only replayed for the scope and version that captured them.
+- **No eval()**: no dynamic code execution.

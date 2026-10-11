@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-label="lastframe">
+  <rect width="1200" height="300" rx="24" fill="#EEF1F4"/>
+  <g transform="translate(330 86) scale(4)">
+    <rect x="7" y="5" width="20" height="20" rx="4" fill="none" stroke="#0098A8" stroke-width="2.5" opacity="0.7"/>
+    <rect x="5" y="7" width="20" height="20" rx="4" fill="none" stroke="#CF2E68" stroke-width="2.5" opacity="0.7"/>
+    <rect x="6" y="6" width="20" height="20" rx="4" fill="#EEF1F4" stroke="#18202B" stroke-width="2.5"/>
+    <rect x="10.5" y="10.5" width="11" height="3" rx="1.5" fill="#18202B"/>
+    <rect x="10.5" y="16" width="7" height="3" rx="1.5" fill="#18202B" opacity="0.45"/>
+  </g>
+  <g font-family="Archivo, 'Helvetica Neue', Arial, sans-serif" font-weight="800" font-size="96" letter-spacing="-3">
+    <text x="476" y="184" fill="#0098A8" opacity="0.5">lastframe</text>
+    <text x="482" y="182" fill="#CF2E68" opacity="0.5">lastframe</text>
+    <text x="479" y="183" fill="#18202B">lastframe</text>
+  </g>
+</svg>
