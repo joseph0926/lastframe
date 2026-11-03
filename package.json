@@ -5,7 +5,7 @@
   "license": "MIT",
   "author": "joseph0926",
   "type": "module",
-  "packageManager": "pnpm@11.17.0",
+  "packageManager": "pnpm@11.28.9",
   "engines": {
     "node": ">=20.19"
   },
