@@ -7,7 +7,12 @@ auditConfig:
     # micromatch in dev tooling (changesets, lint-staged, vite), which matches
     # glob patterns written in this repository, never untrusted input.
     - GHSA-vfj7-8cjw-p6xm
+minimumReleaseAgeExclude:
+  - minimatch@11.0.4
 overrides:
+  # GHSA-g3hv-75wg-m249: update v10's optimizationLevel preprocessing.
+  # v3 lacks that code path and keeps the callable CommonJS API used by ESLint 9.
+  'minimatch@>=10.0.0 <11.0.1': 11.0.4
   'react': '^19.2.4'
   'react-dom': '^19.2.4'
   '@types/react': '^19.2.10'
